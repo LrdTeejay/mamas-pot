@@ -17,19 +17,21 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mamas-pot   # the project lives in this inner folder
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
-      - run: npm ci
+      - run: npm install
       - run: npm run build
         env:
           VITE_PAYSTACK_PUBLIC_KEY: ${{ secrets.VITE_PAYSTACK_PUBLIC_KEY }}
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: mamas-pot/dist
 
   deploy:
     needs: build
